@@ -1,6 +1,9 @@
 package com.example.springbootbackendapirest.models.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
@@ -12,8 +15,15 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotEmpty(message = "Can't be empty")
+    @Size(min = 4, max = 12, message = "Size must be between 4 and 12")
+    @Column(nullable = false)
     private String nombre;
+    @NotEmpty(message = "Can't be empty")
     private String apellido;
+    @NotEmpty(message = "Can't be empty")
+    @Email(message = "Email is not valid")
+    @Column(nullable = false, unique = true)
     private String email;
     @Column(name = "create_at")
     @Temporal(TemporalType.DATE)
@@ -44,6 +54,7 @@ public class Cliente {
         this.apellido = apellido;
     }
 
+    @PreUpdate
     @PrePersist
     public void prePersist() {
         createAt = new Date();
